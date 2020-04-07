@@ -3,8 +3,8 @@
 include '../caesar/caesar.php';
 
 $mensaje = $_POST['mensaje'];
-$salida = '';
-
+$salida = $salida_final = '';
+$cantidad_total = $clave_exitosa = 0;
 
 if (isset($_POST['tarea'])) {
     for ($i = 1; $i < 4; $i++) {
@@ -14,19 +14,22 @@ if (isset($_POST['tarea'])) {
         $palabras = explode(' ', $salida);
         //recorrer las palabras de salida
         for ($j = 0; $j < count($palabras); $j++) {
+            $pal_comp = preg_replace('/\s+/', '', strtolower($palabras[$j]));
             $palabras[$j] = str_replace(' ', '', $palabras[$j]);
-            $dic = fopen('Spanish.txt', 'r');
+            $dic = fopen('listado-general.txt', 'r');
             while (!feof($dic)) {
                 $dic_comparar = fgets($dic);
-                $dic_comparar = str_replace('\n', '', $dic_comparar);
-                $dic_comparar = str_replace(' ', '', $dic_comparar);
+                $dic_comparar = preg_replace('/\s+/', '', $dic_comparar);
                 //fijarse si esta en el diccionario
-                echo strtolower($palabras[$j]) . ' , ' . $dic_comparar . ' = ' . strcmp(strtolower($palabras[$j]), $dic_comparar) . '<br>';
-                //echo strtolower($palabras[$j]) . ' , ' . $dic_comparar . ' = ' . (strtolower($palabras[$j]) ===  $dic_comparar) . '<br>';
-                if (strcmp(strtolower($palabras[$j]), $dic_comparar) === 0) {
+                if (strcmp($pal_comp, $dic_comparar) === 0) {
                     //sumar un hit
-                    echo 'hay coindidencia<br>';
+                    $cantidad_apariciones++;
                 }
+            }
+            if ($cantidad_apariciones > $cantidad_total) {
+                $cantidad_total = $cantidad_apariciones;
+                $salida_final = $salida;
+                $clave_exitosa = $i;
             }
             fclose($dic);
         }
@@ -56,7 +59,7 @@ if (isset($_POST['tarea'])) {
     </form>
 
     <strong>La respuesta es:</strong> <br>
-    <p><?php echo $salida ?></p>
+    <p><?php echo 'Mensaje: ' . $salida_final . ' Cantidad de ocurrencias: ' . $cantidad_total . ' con clave: ' . $clave_exitosa ?></p>
 </body>
 
 </html>
