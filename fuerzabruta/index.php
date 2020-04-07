@@ -15,6 +15,7 @@ if (isset($_POST['tarea'])) {
         //recorrer las palabras de salida
         for ($j = 0; $j < count($palabras); $j++) {
             $pal_comp = preg_replace('/\s+/', '', strtolower($palabras[$j]));
+            $pal_comp = preg_replace('/\W+/', '', strtolower($pal_comp));
             $palabras[$j] = str_replace(' ', '', $palabras[$j]);
             $dic = fopen('listado-general.txt', 'r');
             while (!feof($dic)) {
