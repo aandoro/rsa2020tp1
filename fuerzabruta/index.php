@@ -7,7 +7,7 @@ $salida = $salida_final = '';
 $cantidad_total = $clave_exitosa = 0;
 
 if (isset($_POST['tarea'])) {
-    for ($i = 1; $i < 4; $i++) {
+    for ($i = 1; $i < 26; $i++) {
         $cantidad_apariciones = 0;
         $cipher = new Caesar($mensaje, $i);
         $salida = $cipher->decode();
