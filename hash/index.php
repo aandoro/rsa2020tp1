@@ -1,17 +1,24 @@
 <?php
 include './constantes.php';
+include './database.php';
 
 $usuario_ing = $_POST['nombre'];
 $clave_ing = $_POST['contra'];
 $msj = '';
+$db = new Database();
 
 try {
+    $db->crearBasedatos();
+
     $conn = new PDO("mysql:host=" . HOST . ";dbname=" . DATABASE, USER_DB, PASS_DB);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+
+    $db->CrearTabla($conn);
 } catch (PDOException $e) {
     $msj = '<p style="color: red">Fallo la conexion a la base de datos</p>';
-    //echo "Connection failed: " . $e->getMessage();
+    echo "Connection failed: " . $e->getMessage();
 }
 
 if (isset($_POST['ing'])) {
@@ -32,7 +39,7 @@ if (isset($_POST['ing'])) {
         }
     } catch (PDOException $e) {
         $msj = '<p style="color: red">Usuario y/o contraseña invalida</p>';
-        //echo "Error: " . $e->getMessage();
+        echo "Error: " . $e->getMessage();
     }
 }
 
